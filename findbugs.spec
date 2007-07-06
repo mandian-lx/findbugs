@@ -65,6 +65,8 @@ Requires:       jaxen
 Requires:       jpackage-utils >= 0:1.6
 Requires:       java >= 0:1.4
 BuildRequires:  ant >= 0:1.6
+BuildRequires:  ant-nodeps >= 0:1.6
+BuildRequires:  ant-junit >= 0:1.6
 BuildRequires:  bcel5.3
 BuildRequires:  dom4j
 BuildRequires:  java-devel >= 0:1.4
