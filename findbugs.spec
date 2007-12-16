@@ -35,7 +35,7 @@
 
 Name:           findbugs
 Version:        1.2.1
-Release:        %mkrel 1.1.2
+Release:        %mkrel 1.1.3
 Epoch:          0
 Summary:        Bug Pattern Detector for Java
 License:        LGPL
@@ -71,7 +71,7 @@ BuildRequires:  bcel5.3
 BuildRequires:  dom4j
 BuildRequires:  java-devel >= 0:1.4
 BuildRequires:  jaxen
-BuildRequires:  jpackage-utils >= 0:1.6
+BuildRequires:  java-rpmbuild >= 0:1.6
 BuildRequires:  java-devel >= 0:1.5
 %if %{gcj_support}
 BuildRequires:  java-gcj-compat-devel
