@@ -82,6 +82,7 @@ BuildArch:      noarch
 BuildRequires:  desktop-file-utils
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
 FindBugs is a program to find bugs in Java programs. It looks for 
