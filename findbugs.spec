@@ -35,7 +35,7 @@
 
 Name:           findbugs
 Version:        1.2.1
-Release:        %mkrel 1.1.3
+Release:        %mkrel 1.1.4
 Epoch:          0
 Summary:        Bug Pattern Detector for Java
 License:        LGPL
