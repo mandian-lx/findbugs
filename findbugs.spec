@@ -92,8 +92,6 @@ errors.
 %package javadoc
 Summary:        Javadoc for %{name}
 Group:          Development/Java
-Requires(post): /bin/rm,/bin/ln
-Requires(postun): /bin/rm
 
 %description javadoc
 %{summary}.
