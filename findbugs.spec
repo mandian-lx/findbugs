@@ -121,7 +121,6 @@ Group:          Development/Java
 %{__perl} -pi -e 's|<javac|<javac nowarn="true"|g' build.xml
 %{__perl} -pi -e 's/\r$//g' bin/*.bat
 
-
 %build
 export CLASSPATH=$(build-classpath asm3/asm3 asm3/asm3-commons asm3/asm3-tree bcel5.3 dom4j jaxen junit):`pwd`/build/classes
 export OPT_JAR_LIST="ant/ant-nodeps ant/ant-junit junit"
@@ -164,10 +163,8 @@ EOF
 
 # freedesktop.org menu entry
 %{__mkdir_p} %{buildroot}%{_datadir}/applications
-%{_bindir}/desktop-file-install --vendor mandriva            \
-        --dir ${RPM_BUILD_ROOT}%{_datadir}/applications      \
-        --add-category X-MandrivaLinux-MoreApplications-Development-Tools \
-        --remove-category Application                        \
+%{_bindir}/desktop-file-install --vendor "" \
+        --dir ${RPM_BUILD_ROOT}%{_datadir}/applications \
         %{SOURCE5}
 
 # icons for freedesktop.org and legacy menu entries
