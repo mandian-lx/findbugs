@@ -55,9 +55,8 @@ Patch3:         %{name}-bcel.patch
 Patch4:         %{name}-java-util-regex-gcj.patch
 Patch5:         %{name}-no-com-apple.patch
 Patch6:         %{name}-sorter-dialog.patch
-Patch7:         %{name}-asm.patch
-Patch8:         %{name}-no-recompile-before-api-docs.patch
-Patch9:         %{name}-location.patch
+Patch7:         %{name}-no-recompile-before-api-docs.patch
+Patch8:         %{name}-location.patch
 Requires:       asm3
 Requires:       bcel5.3
 Requires:       dom4j
@@ -117,7 +116,6 @@ Group:          Development/Java
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
-%patch9 -p1
 %{_bindir}/find . -name '*.jar' | %{_bindir}/xargs -t %{__rm}
 %{__rm} src/java/edu/umd/cs/findbugs/gui/OSXAdapter.java
 %{__rm} src/java5/edu/umd/cs/findbugs/gui2/OSXAdapter.java
