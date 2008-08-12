@@ -71,7 +71,7 @@ BuildRequires:  ant-junit
 BuildRequires:  bcel5.3
 BuildRequires:  desktop-file-utils
 BuildRequires:  dom4j
-BuildRequires:  java-devel >= 0:1.5.0
+BuildRequires:  java-rpmbuild
 BuildRequires:  jaxen
 BuildRequires:  jcip-annotations
 BuildRequires:  jpackage-utils >= 0:1.7.4
