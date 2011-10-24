@@ -1,255 +1,193 @@
-# Copyright (c) 2000-2008, JPackage Project
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-#
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the
-#    distribution.
-# 3. Neither the name of the JPackage Project nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-
-%define gcj_support 0
-
-%define section free
+# GCJ note: findbugs currently cannot be compiled with GCJ.  There are several
+# problems, most of which could be fixed with a little effort.  However,
+# findbugs uses java.util.regex.Pattern.LITERAL, which is part of the Java 5
+# specification, but Classpath does not support it.  This is a fatal problem.
 
 Name:           findbugs
-Version:        1.3.4
-Release:        %mkrel 2.0.3
-Epoch:          0
-Summary:        Bug Pattern Detector for Java
+Version:        1.3.9
+Release:        4
+Summary:        Find bugs in Java code
+
+Group:          Development/Java
 License:        LGPLv2+
 URL:            http://findbugs.sourceforge.net/
-Group:          Development/Java
-Source0:        http://download.sourceforge.net/findbugs/findbugs-%{version}-source.zip
-Source1:        findbugs-script
-Source2:        findbugs-16x16.png
-Source3:        findbugs-32x32.png
-Source4:        findbugs-48x48.png
-Source5:        findbugs.desktop
-Source6:        findbugs-1.3.4.pom
-Source7:        findbugs-annotations-1.3.4.pom
-Source8:        findbugs-ant-1.3.4.pom
-Source9:        findbugs-coreplugin-1.3.4.pom
-Source10:       findbugsGUI-1.3.4.pom
-Patch0:         findbugs-build_xml.patch
-Patch1:         findbugs-Project.patch
-Patch2:         findbugs-SortedBugCollection.patch
-Patch3:         findbugs-bcel.patch
-Patch4:         findbugs-manifest.patch
-Requires(post): jpackage-utils >= 0:1.7.4
-Requires(postun): jpackage-utils >= 0:1.7.4
-Requires:       bcel5.3
-Requires:       dom4j
-Requires:       jaxen
-Requires:       java >= 0:1.5.0
-Requires:       jcip-annotations
-Requires:       jpackage-utils >= 0:1.7.4
-Requires:       jsr-305
-BuildRequires:  ant >= 0:1.6.5
+Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}-source.zip
+Source1:        findbugs-ant
+Source2:        findbugs-tools-README
+
+# This patch has not been submitted upstream, as it contains Fedora-specific
+# changes.  It looks in /usr/share/java for jar files at both compile time and
+# run time, instead of in findbugs' lib directory.
+Patch0:         findbugs-1.3.9-build.patch
+
+# Build against ASM 3.2 instead of 3.1. Already changed upstream; see:
+# http://code.google.com/p/findbugs/source/detail?r=11757
+# http://code.google.com/p/findbugs/source/detail?r=11758
+# http://code.google.com/p/findbugs/source/detail?r=11795
+Patch1:         findbugs-asm-version.patch
+
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch:      noarch
+
+BuildRequires:  findbugs-bcel
 BuildRequires:  ant-nodeps
-BuildRequires:  ant-junit
-BuildRequires:  bcel5.3
-BuildRequires:  desktop-file-utils
-BuildRequires:  dom4j
-BuildRequires:  java-rpmbuild
+BuildRequires:  docbook-style-xsl
+BuildRequires:  jakarta-commons-lang
+BuildRequires:  java-1.6.0-openjdk-devel
 BuildRequires:  jaxen
 BuildRequires:  jcip-annotations
-BuildRequires:  jpackage-utils >= 0:1.7.4
+BuildRequires:  jdepend
+BuildRequires:  jFormatString
+BuildRequires:  jpackage-utils
 BuildRequires:  jsr-305
-BuildRequires:  junit
-BuildRequires:  asm3 >= 0:3.0
-%if %{gcj_support}
-BuildRequires:  java-gcj-compat-devel
-%else
-BuildArch:      noarch
-%endif
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRequires:  junit4
+BuildRequires:  objectweb-asm
+BuildRequires:  perl
+BuildRequires:  texlive
+Requires:       findbugs-bcel
+Requires:       jakarta-commons-lang
+Requires:       java-1.6.0-openjdk
+Requires:       jaxen
+Requires:       jcip-annotations
+Requires:       jFormatString
+Requires:       jpackage-utils
+Requires:       jsr-305
+Requires:       junit4
+Requires:       objectweb-asm
 
 %description
-FindBugs is a program to find bugs in Java programs. It looks for 
-instances of ``bug patterns''---code instances that are likely to be 
-errors.
+Findbugs is a program which uses static analysis to look for bugs in Java code.
+It can check for null pointer exceptions, multithreaded code errors, and other
+bugs.
+
+%package -n ant-findbugs
+Group:          Development/Build Tools
+Summary:        Ant task for findbugs
+Requires:       %{name} = %{version}-%{release}
+Requires:       ant
+
+%description -n ant-findbugs
+This package defines an ant task for findbugs for easy integration of findbugs
+into your ant-controlled project.
 
 %package javadoc
-Summary:        Javadoc for %{name}
 Group:          Development/Java
+Summary:        Javadoc documentation for findbugs
+Requires:       %{name} = %{version}-%{release}
 
 %description javadoc
-%{summary}.
+Javadoc documentation for findbugs.
 
-%package manual
-Summary:        Documents for %{name}
+%package tools
 Group:          Development/Java
+Summary:        Addon tools for findbugs
+Requires:       %{name} = %{version}-%{release}
+Requires:       junit4
 
-%description manual
-%{summary}.
+%description tools
+This package contains additional tools for use with findbugs.  See
+README.fedora for more information.
 
 %prep
 %setup -q
-%patch0 -p0
-%patch1 -p0
-%patch2 -p0
-%patch3 -p1
-%patch4 -p1
+%patch0 -p1
+%patch1 -p1
 
-find . -name "*.bat" | xargs -t %{__rm}
-find . -name "*.jar" | xargs -t %{__rm}
+cp -p %{SOURCE2} README.fedora
 
-%{__rm} src/java/edu/umd/cs/findbugs/gui/OSXAdapter.java
-%{__rm} src/java5/edu/umd/cs/findbugs/gui2/OSXAdapter.java
+# Make sure we don't accidentally use any existing JAR files
+rm -f lib/*.jar
 
-%{__rm} -r src/java5/net/jcip/annotations
+# Use the system jcip-annotations instead of building it in
+rm -fr src/java5/net
 
-# FIXME: setup is monolithic right now, as especially the ant task
-# doesn't read the CLASSPATH
-#%%{__perl} -p -i -e 's|^Class-Path:.*\n||g' etc/*.MF
+# Get rid of code for Mac OS X that depends on a jar from Apple
+rm -f src/java/edu/umd/cs/findbugs/gui/OSXAdapter.java
+rm -f src/java5/edu/umd/cs/findbugs/gui2/OSXAdapter.java
 
-pushd lib
-%{__ln_s} $(build-classpath bcel5.3)
-%{__ln_s} $(build-classpath dom4j)
-%{__ln_s} $(build-classpath jaxen)
-%{__ln_s} $(build-classpath jcip-annotations)
-%{__ln_s} $(build-classpath jsr-305)
-%{__ln_s} $(build-classpath junit)
-%{__ln_s} $(build-classpath asm3/asm3)
-%{__ln_s} $(build-classpath asm3/asm3-commons)
-%{__ln_s} $(build-classpath asm3/asm3-tree)
-popd
+# Turn on the executable bits for some auxiliary scripts
+chmod a+x etc/summarizeBugs etc/diffBugSummaries design/architecture/mkdep.pl
 
 %build
-export CLASSPATH=
-export OPT_JAR_LIST="ant/ant-nodeps ant/ant-junit junit"
-%{ant} build apiJavadoc 
-#runjunit
+# Build the class files
+ant
 
-%install
-%{__rm} -rf %{buildroot}
+# Build the javadocs
+ant apiJavadoc
 
-# jars
-%{__mkdir_p} %{buildroot}%{_javadir}/%{name}/lib
-%{__cp} -a lib/findbugs.jar %{buildroot}%{_javadir}/%{name}/lib/findbugs-%{version}.jar
-%{__cp} -a lib/findbugsGUI.jar %{buildroot}%{_javadir}/%{name}/lib/findbugsGUI-%{version}.jar
-%{__cp} -a lib/findbugs-ant.jar %{buildroot}%{_javadir}/%{name}/lib/findbugs-ant-%{version}.jar
-%{__cp} -a lib/annotations.jar %{buildroot}%{_javadir}/%{name}/lib/annotations-%{version}.jar
-
-pushd %{buildroot}%{_javadir}/%{name}/lib
-%{__ln_s} $(build-classpath bcel5.3)
-%{__ln_s} $(build-classpath dom4j)
-%{__ln_s} $(build-classpath jaxen)
-%{__ln_s} $(build-classpath jcip-annotations)
-%{__ln_s} $(build-classpath jsr-305)
-%{__ln_s} $(build-classpath asm3/asm3)
-%{__ln_s} $(build-classpath asm3/asm3-commons)
-%{__ln_s} $(build-classpath asm3/asm3-tree)
-for jar in *-%{version}*; do %{__ln_s} ${jar} ${jar/-%{version}/}; done
+# Build the architecture PDF
+pushd design/architecture
+make depend
+make
 popd
 
-%{__cp} -a plugin %{buildroot}%{_javadir}/%{name}
+# Package up the tools
+cd build/classes
+jar cf ../../lib/findbugs-tools.jar edu/umd/cs/findbugs/tools
 
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/ant.d
-%{__cat} > %{buildroot}%{_sysconfdir}/ant.d/%{name} << EOF
-findbugs/lib/findbugs findbugs/lib/findbugs-ant
-EOF
+%install
+rm -rf $RPM_BUILD_ROOT
 
-# poms
-%{__mkdir_p} %{buildroot}%{_datadir}/maven2/poms
-%{__cp} -a %{SOURCE6} %{buildroot}%{_datadir}/maven2/poms/JPP.findbugs.lib-findbugs.pom
-%add_to_maven_depmap %{name} %{name} %{version} JPP/%{name}/lib %{name}
-%{__cp} -a %{SOURCE7} %{buildroot}%{_datadir}/maven2/poms/JPP.findbugs.lib-annotations.pom
-%add_to_maven_depmap %{name} annotations %{version} JPP/%{name}/lib annotations
-%{__cp} -a %{SOURCE8} %{buildroot}%{_datadir}/maven2/poms/JPP.findbugs.lib-findbugs-ant.pom
-%add_to_maven_depmap %{name} %{name}-ant %{version} JPP/%{name}/lib %{name}-ant
-%{__cp} -a %{SOURCE9} %{buildroot}%{_datadir}/maven2/poms/JPP.findbugs.plugin-coreplugin.pom
-%add_to_maven_depmap %{name} coreplugin %{version} JPP/%{name}/plugin coreplugin
-%{__cp} -a %{SOURCE10} %{buildroot}%{_datadir}/maven2/poms/JPP.findbugs.lib-findbugsGUI.pom
-%add_to_maven_depmap %{name} %{name}GUI %{version} JPP/%{name}/lib %{name}GUI
+# Install the jars
+mkdir -p $RPM_BUILD_ROOT%{_javadir}
+cp -p lib/annotations.jar $RPM_BUILD_ROOT%{_javadir}/%{name}-annotations-%{version}.jar
+ln -s %{name}-annotations-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}-annotations.jar
+cp -p lib/%{name}-tools.jar $RPM_BUILD_ROOT%{_javadir}/%{name}-tools-%{version}.jar
+ln -s %{name}-tools-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}-tools.jar
+cp -p lib/%{name}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}-%{version}.jar
+ln -s %{name}-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}.jar
 
-# script
-%{__mkdir_p} %{buildroot}%{_bindir}
-%{__cp} -a %{SOURCE1} %{buildroot}%{_bindir}/%{name}
+# Install the ant task
+mkdir -p $RPM_BUILD_ROOT%{_javadir}/ant
+cp -p lib/%{name}-ant.jar $RPM_BUILD_ROOT%{_javadir}/ant/ant-%{name}-%{version}.jar
+ln -s ant-%{name}-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/ant/ant-%{name}.jar
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ant.d
+cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/ant.d/%{name}
 
-# javadoc
-%{__mkdir_p} %{buildroot}%{_javadocdir}/%{name}-%{version}
-# FIXME: (dwalluck): javadoc (openjdk6) throws NPE
-%{__cp} -a apiJavaDoc/* %{buildroot}%{_javadocdir}/%{name}-%{version} || :
-(cd %{buildroot}%{_javadocdir} && %{__ln_s} %{name}-%{version} %{name})
+# Install the javadocs
+mkdir -p $RPM_BUILD_ROOT%{_javadocdir}
+cp -a apiJavaDoc $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
+ln -s %{name}-%{version} $RPM_BUILD_ROOT%{_javadocdir}/%{name}
 
-# freedesktop.org menu entry
-%{__mkdir_p} %{buildroot}%{_datadir}/applications
-%{_bindir}/desktop-file-install --vendor jpackage --dir %{buildroot}%{_datadir}/applications %{SOURCE5}
+# Install the scripts
+mkdir -p $RPM_BUILD_ROOT%{_bindir}
+for f in $(find bin -maxdepth 1 -type f \! -name '*.bat'); do
+  cp -p $f $RPM_BUILD_ROOT%{_bindir}
+done
 
-# icons for freedesktop.org menu entries
-%{__install} -D -p -m 644 %{SOURCE2} %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/%{name}.png
-%{__install} -D -p -m 644 %{SOURCE3} %{buildroot}%{_datadir}/icons/hicolor/32x32/apps/%{name}.png
-%{__install} -D -p -m 644 %{SOURCE4} %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
-%{__install} -D -p -m 644 %{SOURCE4} %{buildroot}%{_datadir}/pixmaps/%{name}.png
+# Install the shared files
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}
+cp -a etc plugin $RPM_BUILD_ROOT%{_datadir}/%{name}
 
-# other scripts
-%{__mkdir_p} %{buildroot}%{_datadir}/%{name}-%{version}/bin
-%{__cp} -a bin/* %{buildroot}%{_datadir}/%{name}-%{version}/bin
-
-# manual
-%{__mkdir_p} %{buildroot}%{_docdir}/%{name}-%{version}
-%{__cp} -a doc/* %{buildroot}%{_docdir}/%{name}-%{version}
-
-%{gcj_compile}
+# Remove now unnecessary build-only manual files so %%doc doesn't get them
+rm -f doc/manual*.xml doc/manual*.xsl
 
 %clean
-%{__rm} -rf %{buildroot}
-
-%post
-%update_maven_depmap
-%if %{gcj_support}
-%{update_gcjdb}
-%endif
-
-%postun
-%update_maven_depmap
-%if %{gcj_support}
-%{clean_gcjdb}
-%endif
+rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(0644,root,root,0755)
-%doc LICENSE.txt README.txt design
-%attr(0755,root,root) %{_bindir}/*
-%{_javadir}/%{name}
-%dir %{_datadir}/%{name}-%{version}
-%dir %{_datadir}/%{name}-%{version}/bin
-%attr(0755,root,root) %{_datadir}/%{name}-%{version}/bin/*
-%{_datadir}/maven2/poms/*.pom
-%{_mavendepmapfragdir}/*
-%{_sysconfdir}/ant.d/%{name}
-%{gcj_files}
-%{_datadir}/applications/*%{name}.desktop
-%{_datadir}/icons/*/*/apps/*
-%{_datadir}/pixmaps/%{name}.png
+%defattr(-,root,root,-)
+%doc LICENSE.txt design/DecouplingFromBCEL.txt design/VisitingAndCaching.txt
+%doc README.txt design/eclipse\ findbugs\ plugin\ features.sxw
+%doc design/architecture/architecture.pdf doc
+%{_bindir}/*
+%{_datadir}/%{name}
+%{_javadir}/findbugs-annotations*
+%{_javadir}/findbugs-%{version}.jar
+%{_javadir}/findbugs.jar
+
+%files -n ant-findbugs
+%defattr(-,root,root,-)
+%doc LICENSE.txt
+%{_javadir}/ant/*
+%config(noreplace) %{_sysconfdir}/ant.d/%{name}
 
 %files javadoc
-%defattr(0644,root,root,0755)
-%{_javadocdir}/%{name}-%{version}
-%{_javadocdir}/%{name}
+%defattr(-,root,root,-)
+%{_javadocdir}/*
 
-%files manual
-%defattr(0644,root,root,0755)
-%doc %{_docdir}/%{name}-%{version}
+%files tools
+%defattr(-,root,root,-)
+%doc LICENSE.txt README.fedora
+%{_javadir}/findbugs-tools*
+
