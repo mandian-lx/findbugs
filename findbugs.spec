@@ -5,7 +5,7 @@
 
 Name:           findbugs
 Version:        1.3.9
-Release:        4
+Release:        6
 Summary:        Find bugs in Java code
 
 Group:          Development/Java
