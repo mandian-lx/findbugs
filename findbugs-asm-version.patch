@@ -1,0 +1,24 @@
+diff -urN findbugs-1.3.9-ORIGINAL/build.xml findbugs-1.3.9/build.xml
+--- findbugs-1.3.9-ORIGINAL/build.xml	2010-06-02 19:22:17.000000000 +0100
++++ findbugs-1.3.9/build.xml	2010-06-02 19:22:38.000000000 +0100
+@@ -60,9 +60,9 @@
+ 		<pathelement location="${systemjar.dir}/findbugs-bcel.jar"/>
+ 		<pathelement location="${systemjar.dir}/dom4j-1.6.1.jar"/>
+ 		<pathelement location="${systemjar.dir}/junit4.jar"/>
+-		<pathelement location="${systemjar.dir}/objectweb-asm/asm-3.1.jar"/>
+-		<pathelement location="${systemjar.dir}/objectweb-asm/asm-commons-3.1.jar"/>
+-		<pathelement location="${systemjar.dir}/objectweb-asm/asm-tree-3.1.jar"/>
++		<pathelement location="${systemjar.dir}/objectweb-asm/asm-3.2.jar"/>
++		<pathelement location="${systemjar.dir}/objectweb-asm/asm-commons-3.2.jar"/>
++		<pathelement location="${systemjar.dir}/objectweb-asm/asm-tree-3.2.jar"/>
+ 		<pathelement location="${systemjar.dir}/jaxen-1.1.1.jar"/>		
+ 		<pathelement location="${systemjar.dir}/jsr-305.jar"/>
+ 		<pathelement location="${systemjar.dir}/jFormatString.jar"/>
+diff -urN findbugs-1.3.9-ORIGINAL/etc/MANIFEST-findbugs.MF findbugs-1.3.9/etc/MANIFEST-findbugs.MF
+--- findbugs-1.3.9-ORIGINAL/etc/MANIFEST-findbugs.MF	2010-06-02 19:22:17.000000000 +0100
++++ findbugs-1.3.9/etc/MANIFEST-findbugs.MF	2010-06-02 19:26:11.000000000 +0100
+@@ -1,3 +1,3 @@
+ Manifest-Version: 1.0
+ Main-Class: edu.umd.cs.findbugs.LaunchAppropriateUI
+-Class-Path: findbugs-bcel.jar dom4j-1.6.1.jar jaxen-1.1.1.jar objectweb-asm/asm-3.1.jar objectweb-asm/asm-tree-3.1.jar objectweb-asm/asm-commons-3.1.jar jsr-305.jar jFormatString.jar commons-lang.jar
++Class-Path: findbugs-bcel.jar dom4j-1.6.1.jar jaxen-1.1.1.jar objectweb-asm/asm-3.2.jar objectweb-asm/asm-tree-3.2.jar objectweb-asm/asm-commons-3.2.jar jsr-305.jar jFormatString.jar commons-lang.jar
