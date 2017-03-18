@@ -16,7 +16,7 @@ index 698b91f..f711eae 100644
      <path id="findbugs.classpath">
 -        <fileset dir="${jar.dir}" includes="*.jar"/>
 +        <pathelement location="${systemjar.dir}/ant.jar" />
-+        <pathelement location="${systemjar.dir}/objectweb-asm/asm-debug-all.jar" />
++        <pathelement location="${systemjar.dir}/objectweb-asm/asm-all.jar" />
 +        <pathelement location="${systemjar.dir}/findbugs-bcel.jar" />
 +        <pathelement location="${systemjar.dir}/apache-commons-lang.jar" />
 +        <pathelement location="${systemjar.dir}/dom4j.jar" />
