@@ -186,7 +186,7 @@ cp -p plugins/noUpdateChecks/build/noUpdateChecks.jar $RPM_BUILD_ROOT%{_datadir}
 # Create /usr/share/findbugs/lib directory containing symlinks to required JARs (bug #1080682)
 # List is based on the Class-Path attribute in etc/MANIFEST-findbugs.MF
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}/lib
-for i in findbugs findbugs-bcel dom4j jaxen objectweb-asm/asm-all jsr-305 \
+for i in findbugs findbugs-bcel dom4j jaxen objectweb-asm/asm-all objectweb-asm/asm jsr-305 \
   jFormatString apache-commons-lang; do
     ln -s %{_javadir}/$i.jar $RPM_BUILD_ROOT%{_datadir}/%{name}/lib
 done
