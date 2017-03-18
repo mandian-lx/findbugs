@@ -1,4 +1,8 @@
 sources:
-  "findbugs-1.3.9-source.zip:"	3fee4195a71a4a2d8c000a8a9f0ccb2abd7c23f7
-  "findbugs-ant:"	90e65a1c0f069bb6eb1857c09c9ef495aaf035b8
-  "findbugs-tools-README:"	c7d3de062d05ca998e9eeb5d35a860ed006d11e8
+  "findbugs-3.0.1-source.zip":   5eba597f0bb4679469197b0e9184a9540bb54f8b
+  "annotations-3.0.0.pom":   3aa1ed94d499d40ee601773f4af353450c94e70d
+  "noUpdateChecks-plugin-20140707gitcce19ac.tgz":   a228fd74491b0acdb963bbdc2c2de7468fbdc225
+  "findbugs-ant":   f1b561d932a14314a5136d6cd1cd45684a2e81c3
+  "findbugs-ant-3.0.0.pom":   d22e5712d9ee37c54f4176783c6d8218f914301b
+  "findbugs-tools-README":   c7d3de062d05ca998e9eeb5d35a860ed006d11e8
+  "findbugs-3.0.1.pom":   6bf484eecb866752449a6b2325325104fcb182f2
